@@ -49,7 +49,7 @@ const Group = () => {
   });
 
   return (
-    <group ref={groupRef}>
+    <group ref={groupRef} position={[0, 400, 100]}>
       {geometryList.map((_, index) => (
         <Geometory key={index} index={index} />
       ))}
@@ -64,10 +64,13 @@ export default function Page() {
     <Canvas
       camera={{
         fov: 45,
-        aspect: 960 / 540,
-        near: 1,
+        aspect: width / height,
+        near: 100,
         far: 10000,
         position: [0, 500, 1000],
+        lookAt: () => {
+          return new THREE.Vector3(0, 0, 0);
+        },
       }}
       style={{
         width: width,
