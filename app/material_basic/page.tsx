@@ -9,7 +9,7 @@ import { TextureLoader } from "three/src/loaders/TextureLoader";
 const width = 960;
 const height = 540;
 
-const Box = () => {
+const Earth = () => {
   const meshRef = useRef<THREE.Mesh>(null);
   const colorMap = useLoader(TextureLoader, "./earthmap1k.jpg");
 
@@ -23,7 +23,24 @@ const Box = () => {
     <mesh ref={meshRef}>
       <sphereGeometry args={[300, 30, 30]} />
       <meshStandardMaterial map={colorMap} />
-      <directionalLight color={0xffffff} position={[1, 1, 1]} />
+    </mesh>
+  );
+};
+
+const Sphere = () => {
+  const meshRef = useRef<THREE.Mesh>(null);
+
+  useFrame(() => {
+    if (meshRef.current) {
+      meshRef.current.rotation.y += 0.01;
+    }
+  });
+
+  return (
+    <mesh ref={meshRef}>
+      <sphereGeometry args={[300, 30, 30]} />
+      <meshStandardMaterial color={0xff0000} />
+      {/* <meshNormalMaterial /> */}
     </mesh>
   );
 };
@@ -44,7 +61,11 @@ export default function Page() {
         backgroundColor: "#000",
       }}
     >
-      <Box />
+      <Earth />
+      {/* <Sphere /> */}
+
+      <directionalLight color={0xffffff} position={[1, 1, 1]} />
+      {/* <ambientLight intensity={0.5} color={0xffffff} /> */}
     </Canvas>
   );
 }
