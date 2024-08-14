@@ -2,7 +2,8 @@
 
 import * as THREE from "three";
 import React, { useRef, useState } from "react";
-import { Canvas, useFrame, ThreeElements } from "@react-three/fiber";
+import { Canvas, useFrame, ThreeElements, useLoader } from "@react-three/fiber";
+import { TextureLoader } from "three/src/loaders/TextureLoader";
 
 // サイズを指定
 const width = 960;
@@ -10,6 +11,7 @@ const height = 540;
 
 const Box = () => {
   const meshRef = useRef<THREE.Mesh>(null);
+  const colorMap = useLoader(TextureLoader, "./earthmap1k.jpg");
 
   useFrame(() => {
     if (meshRef.current) {
@@ -19,8 +21,9 @@ const Box = () => {
 
   return (
     <mesh ref={meshRef}>
-      <boxGeometry args={[400, 400, 400]} />
-      <meshNormalMaterial />
+      <sphereGeometry args={[300, 30, 30]} />
+      <meshStandardMaterial map={colorMap} />
+      <directionalLight color={0xffffff} position={[1, 1, 1]} />
     </mesh>
   );
 };
@@ -29,14 +32,17 @@ export default function Page() {
   return (
     <Canvas
       camera={{
-        fov: 90,
+        fov: 45,
         aspect: 960 / 540,
-        near: 0.1,
+        near: 1,
         far: 10000,
         position: [0, 0, 1000],
-        // rotation: [-Math.PI / 12, 0, 0],
       }}
-      style={{ width: width, height: height, backgroundColor: "#000" }}
+      style={{
+        width: width,
+        height: height,
+        backgroundColor: "#000",
+      }}
     >
       <Box />
     </Canvas>
