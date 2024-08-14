@@ -4,6 +4,7 @@ import * as THREE from "three";
 import React, { useRef, useState } from "react";
 import { Canvas, useFrame, ThreeElements, useLoader } from "@react-three/fiber";
 import { TextureLoader } from "three/src/loaders/TextureLoader";
+import { PerspectiveCamera } from "@react-three/drei";
 
 // サイズを指定
 const width = 960;
@@ -20,7 +21,7 @@ const geometryList = [
   <torusGeometry args={[50, 30, 16, 100]} />,
 ];
 
-const Mesh = () => {
+const Material = () => {
   return <meshStandardMaterial color={0xff0000} side={THREE.DoubleSide} />;
 };
 
@@ -34,7 +35,7 @@ const Geometory = ({ index }: { index: number }) => {
       ]}
     >
       {geometryList[index]}
-      <Mesh />
+      <Material />
     </mesh>
   );
 };
@@ -49,12 +50,10 @@ const Group = () => {
   });
 
   return (
-    <group ref={groupRef} position={[0, 400, 100]}>
+    <group ref={groupRef}>
       {geometryList.map((_, index) => (
         <Geometory key={index} index={index} />
       ))}
-      <directionalLight color={0xffffff} position={[1, 1, 1]} />
-      <ambientLight intensity={0.5} color={0x999999} />
     </group>
   );
 };
@@ -62,23 +61,24 @@ const Group = () => {
 export default function Page() {
   return (
     <Canvas
-      camera={{
-        fov: 45,
-        aspect: width / height,
-        near: 100,
-        far: 10000,
-        position: [0, 500, 1000],
-        lookAt: () => {
-          return new THREE.Vector3(0, 0, 0);
-        },
-      }}
       style={{
         width: width,
         height: height,
         backgroundColor: "#000",
       }}
     >
+      <PerspectiveCamera
+        makeDefault
+        fov={90}
+        aspect={width / height}
+        position={[0, 200, 1000]}
+        lookAt={() => {
+          return new THREE.Vector3(0, 0, 0);
+        }}
+      />
       <Group />
+      <directionalLight color={0xffffff} position={[1, 1, 1]} />
+      <ambientLight intensity={0.5} color={0x999999} />
     </Canvas>
   );
 }
